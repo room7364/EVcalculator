@@ -1,1 +1,1 @@
-g++ main.o ../mylibs/Range.o ../mylibs/combtostring.o ../../lib/ompeval.a -pthread
+g++ main.o ../mylibs/OrderedHands.o ../mylibs/combtostring.o ../../lib/ompeval.a -pthread

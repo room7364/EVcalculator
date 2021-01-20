@@ -4,10 +4,5 @@
 #include "../mylibs/HodlemCalc.h"
 
 int main() {
-    hc::Range r1;
-    std::string hands = "22";
-    std::string range = "random";
-    std::string board = "preflop";
-    r1.gethands(hands);
-    r1.getequties(range, board);
+    hc::OrderedHands preflop("preflop", 0.01);
 }
