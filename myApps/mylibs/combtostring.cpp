@@ -8,7 +8,7 @@ namespace hc {
         }
     }
 
-    std::string combtostring(comb& c) {
+    std::string combtostring(const std::array<uint8_t,2>& c) {
         return cardtostring(c[0]) + cardtostring(c[1]);
     } 
 

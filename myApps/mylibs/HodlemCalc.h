@@ -9,12 +9,12 @@
 namespace hc {
 
     typedef std::vector<std::array<uint8_t,2>> comblist;
-    typedef std::array<uint8_t,2> comb;
-    std::string combtostring(comb&);
+    std::string combtostring(const std::array<uint8_t,2>&);
     std::string cardtostring(uint8_t);
     void displaycombs(comblist&);
+    static const int NUM_HANDS_ALL = 1326;
 
-    class Hand {
+    /* class Hand {
         private:
             std::string value;
             double equity;
@@ -30,66 +30,51 @@ namespace hc {
             void setvalue(const std::string& val) { value = val;}
 
             bool operator<(Hand& second) { return equity < second.equity; }
+
+            static friend greater(const Hand& left, const Hand& right) { return left.equity > right.equity; }
     };
-
-    // Object of Range class stores pairs "hand - equity"
-
-        // Format of strings assigning ranges:
-            // K4 : all suited and offsuited combos with specified ranks
-            // K4s : suited combos
-            // K4o : offsuited combos
-            // Kc4d : specific suits
-            // K4o+ : specified hand and all similar hands with a better kicker (K4 to KQ)
-            // 44+ : pocket pair and all higher pairs
-            // K4+,Q8s,84 : multiple hands can be combined with comma
-            // random : all hands
-            // Spaces and non-matching characters in the end are ignored. The expressions are case-insensitive.
-
-        // gethands() fills object with hand values.
-            // parameter is string assigning range for this Range object
-
-        // getequities() adds an equity value to each hand
-            // first parameter is string assigning range oppositing to which equities calculated
-            // second parameter is string assigning board cards
-                // board cards are set as follows "2c8hAh"; suits: 's', 'h', 'c', 'd'
-/* UNUSED
-    class Range {
-        private:
-            std::vector<Hand> hands;
-            void addhand(const std::string& val, const double& eq) {
-                Hand hand(val, eq);
-                hands.push_back(hand);
-            }
-        public:
-            void gethands(std::string&);
-            void getequties(std::string, std::string);
-    };
-
-    class EQtable {
-    private:
-        std::vector<Hand> hands;
-        void addhand(const std::string& val, const double& eq) {
-            Hand hand(val, eq);
-            hands.push_back(hand);
-        }
-        void getequties();
-    public:
-        EQtable();
-    }; */
 
     class OrderedHands {
-    private:
-        static const int NUM_HANDS_ALL = 1326;
+        private:
 
-        std::array<Hand, NUM_HANDS_ALL> hands;
+            std::array<Hand, NUM_HANDS_ALL> hands;
 
-        std::string board;
+            std::string board;
 
-        double time;
+            double time;
 
-        double calcequity(const std::string&);
-    public:
-        OrderedHands(const std::string&, double);
+            double calcequity(const std::string&);
+        public:
+            OrderedHands(const std::string&, double);
+
+            std::string getvalue(int rank) { return hands[rank].getvalue; }
+    }; */
+
+    struct Hand {
+        std::array<uint8_t, 2> hand;
+        std::array<double, NUM_HANDS_ALL> equities;
+    };
+
+    bool comp(const Hand& left, const Hand& right);
+
+    class EquityTable {
+        private:
+            std::string board;
+            
+            std::array<Hand, NUM_HANDS_ALL> table;
+
+            std::array<omp::CardRange, NUM_HANDS_ALL> orderedranges;
+
+            double time;
+
+            double calcequity(const std::array<uint8_t,2>&, const omp::CardRange&);
+
+            std::array<uint8_t, 2> stringtocomb(std::string&);
+        public:
+            EquityTable(std::string&, double);
+            double geteq(std::string&, int);
+            double geteq(int, int);
+            std::string gethand(int rank) { return combtostring(table[rank].hand); };
     };
 
 }
