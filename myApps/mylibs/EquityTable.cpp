@@ -33,7 +33,7 @@ namespace hc {
             // Getting hands with theirs eqities against random range
             omp::CardRange allhands("random");
             std::vector<std::array<uint8_t,2>> combslist = allhands.combinations();
-            for (int i; i < NUM_HANDS_ALL; i++) {
+            for (int i = 0; i < NUM_HANDS_ALL; i++) {
                 table[i].hand = combslist[i];
                 table[i].equities[NUM_HANDS_ALL - 1] = calcequity(table[i].hand, allhands);
             }
